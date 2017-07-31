@@ -1,11 +1,23 @@
 # Installation
 
+Install the repository manually or through wstool
+```
+wstool init ~/catkin_ws/src/
+wstool merge -t ~/catkin_ws/src/ ~/catkin_ws/src/<path>/<component>.rosinstall.kinetic
+wstool update -t ~/catkin_ws/src/
+```
 ```
 sudo usermod -a -G dialout $USER
 reboot (or logout)
 sudo apt-get install ros-kinetik-soem
+cd ~/catkin_ws/src
+export ROS_PACKAGE_PATH=~/catkin_ws/src:$ROS_PACKAGE_PATH
 rosdep install -a -y --ignore-src
+catkin_make
 ```
+## Problems to be tested
+
+- soem is not automatically installed from rosdep, at least in Kinetik and must be manually installed
 
 # Running
 ```
