@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<launch>
+	<node name="robotiq_gripper_2finger" pkg="robotiq_c_model_control" type="CModelRtuNode.py" args="/dev/ttyUSB0"/>
+
+	<!-- Register the module -->
+	<node name="RegisterRobotiqGripper" pkg="dnb_component_manager" type="register.py"
+		args="$(find robotiq_c_model_control)/module_config/module.yaml" />
+</launch>

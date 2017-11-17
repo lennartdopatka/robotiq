@@ -1,0 +1,6 @@
+status_topic: '/robotiq_gripper_2finger/status'
+configuration: []
+#- datatype: bool # types: int, double, bool, string
+#  name: parameter1
+#  namespace: rampup_module_demo
+#  value: 'false'
