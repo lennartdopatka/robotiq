@@ -41,15 +41,15 @@ include_directories(
   ${robotiq_ethercat_INCLUDE_DIRS}
 )
 
-add_executable(c_model_ethercat_node 
-  src/robotiq_c_model_control/c_model_ethercat_node.cpp 
+add_executable(c_model_ethercat_node
+  src/robotiq_c_model_control/c_model_ethercat_node.cpp
   src/robotiq_c_model_control/c_model_ethercat_client.cpp
 )
 
 target_link_libraries(c_model_ethercat_node
    ${robotiq_ethercat_LIBRARIES}
    ${catkin_LIBRARIES}
-  
+
 )
 
 add_dependencies(c_model_ethercat_node robotiq_c_model_control_generate_messages_cpp)
@@ -61,6 +61,8 @@ add_dependencies(c_model_ethercat_node robotiq_c_model_control_generate_messages
 # all install targets should use catkin DESTINATION variables
 # See http://ros.org/doc/groovy/api/catkin/html/adv_user_guide/variables.html
 
-install(PROGRAMS nodes/CModelSimpleController.py nodes/CModelStatusListener.py 
+install(PROGRAMS nodes/CModelSimpleController.py nodes/CModelStatusListener.py
     nodes/CModelTcpNode.py nodes/CModelRtuNode.py DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
-
+install(
+  DIRECTORY module_config/ DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/module_config
+)
