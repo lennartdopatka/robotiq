@@ -63,6 +63,5 @@ add_dependencies(c_model_ethercat_node robotiq_c_model_control_generate_messages
 
 install(PROGRAMS nodes/CModelSimpleController.py nodes/CModelStatusListener.py
     nodes/CModelTcpNode.py nodes/CModelRtuNode.py DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
-install(
-  DIRECTORY module_config/ DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/module_config
-)
+install(DIRECTORY module_config DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION})
+install(DIRECTORY launch DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION})
