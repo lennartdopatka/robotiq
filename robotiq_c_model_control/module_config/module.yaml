@@ -2,7 +2,7 @@ package: robotiq_c_model_control
 components:
   - name: "Robotiq 2-Finger Gripper"
     description: "The Robotiq 2-Finger gripper also knowns as C-Model."
-    type: driver/gripper/robotiq/2finger
+    type: driver/gripper/robotiq/2-finger
     roslaunch: start.launch
     configuration: []
 nodes:
