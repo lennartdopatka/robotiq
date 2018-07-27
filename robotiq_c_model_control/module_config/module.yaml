@@ -1,12 +1,10 @@
 package: robotiq_c_model_control
-components:
-  - name: "Robotiq 2-Finger Gripper"
-    description: "The Robotiq 2-Finger gripper also knowns as C-Model."
-    type: driver/gripper/robotiq/2-finger
-    roslaunch: start.launch
-    configuration: []
+name: 'Robotiq 2-Finger Gripper'
+description: 'The Robotiq 2-Finger gripper also knowns as C-Model.'
+type: driver/gripper/robotiq/2finger
+roslaunch: start.launch
+configuration: []
 nodes:
   - node_callerid: /robotiq_gripper_2finger # The name of the node inside the launch file
     type: CModelRtuNode.py # The file which is started inside the node
-yaml_config_folder: module_config/yaml
 status_topic: '/robotiq_gripper_2finger/status'
