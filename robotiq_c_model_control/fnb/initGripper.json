@@ -1,0 +1,25 @@
+{
+  "models": [],
+  "_id": "5aa164ae19dc6a0b57dbae57",
+  "rev_hash": "00f831a9da0ec905fb2aed975b29e3705e194cc2ee018135b67f362faa5ae9c7",
+  "updatedAt": "2018-03-08T16:28:30.852Z",
+  "createdAt": "2018-03-08T16:28:30.852Z",
+  "title": "Init Robotiq Gripper",
+  "description": "Open the attached Gripper",
+  "image": "icons-tools-gripper",
+  "owner": {
+    "_id": "5a718b1319ffc57d9a366325",
+    "type": "Team"
+  },
+  "__v": 0,
+  "type": "CMPBasic",
+  "visible": false,
+  "script": "#!/usr/bin/env python\n\nimport rospy\nimport yaml\nimport json\nimport actionlib\n\nfrom robotiq_c_model_control.msg import *\n\ndef execute(input_parameters, output_parameters):\n\t\n\tpub = rospy.Publisher('/CModelRobotOutput', CModel_robot_output, queue_size=10)\n\t\n\tcommand = CModel_robot_output()\n\tcommand2 = CModel_robot_output()\n\n\tcommand.rACT = 0\n\tcommand.rGTO = 0\n\tcommand.rATR = 0\n\tcommand.rPR = 0\n\tcommand.rSP = 0\n\tcommand.rFR = 0\n\n\tcommand2.rACT = 1\n\tcommand2.rGTO = 1\n\tcommand2.rATR = 0\n\tcommand2.rPR = 0\n\tcommand2.rSP = 255\n\tcommand2.rFR = 150\n\n\tpub.publish(command)\n\trospy.sleep(2)\n\tpub.publish(command2)\n\trospy.sleep(2)\n\n\treturn output_parameters",
+  "outputParameters": [],
+  "globalParameters": [],
+  "inputParameters": [],
+  "componentFb": {
+    "package": "robotiq_c_model_control",
+    "id": "init" 
+  }
+}

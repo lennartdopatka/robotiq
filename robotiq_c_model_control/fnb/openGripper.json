@@ -1,0 +1,25 @@
+{
+  "models": [],
+  "_id": "5aa164ae19dc6a0b57dbae58",
+  "rev_hash": "92bae3c8592a085840cd707c0a59d116c3b86df17268d0ef5b11382b2008d3a9",
+  "updatedAt": "2018-03-08T16:28:30.852Z",
+  "createdAt": "2018-03-08T16:28:30.852Z",
+  "title": "Open Robotiq Gripper",
+  "description": "Open the attached Gripper",
+  "image": "icons-tools-gripper-open",
+  "owner": {
+    "_id": "5a718b1319ffc57d9a366325",
+    "type": "Team"
+  },
+  "__v": 0,
+  "type": "CMPBasic",
+  "visible": false,
+  "script": "#!/usr/bin/env python\n\nimport rospy\nimport yaml\nimport json\nimport actionlib\n\nfrom robotiq_c_model_control.msg import *\n\ndef execute(input_parameters, output_parameters):\n\t\n\tpub = rospy.Publisher('/CModelRobotOutput', CModel_robot_output, queue_size=10)\n\t\n\tcommand = CModel_robot_output()\n\n\tcommand.rACT = 1\n\tcommand.rGTO = 1\n\tcommand.rATR = 0\n\tcommand.rPR = 0\n\tcommand.rSP = 250\n\tcommand.rFR = 250\n\n\tpub.publish(command)\n\trospy.sleep(1)\n\n\treturn output_parameters",
+  "outputParameters": [],
+  "globalParameters": [],
+  "inputParameters": [],
+  "componentFb": {
+    "package": "robotiq_c_model_control",
+    "id": "open" 
+  }
+}

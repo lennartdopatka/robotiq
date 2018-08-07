@@ -8,3 +8,8 @@ nodes:
   - node_callerid: /robotiq_gripper_2finger # The name of the node inside the launch file
     type: CModelRtuNode.py # The file which is started inside the node
 status_topic: '/robotiq_gripper_2finger/status'
+wizards:
+  - name: 'Robotiq Gripper'
+    tag: "robotiq-gripper"
+    dataType: 'gripperRobotiqParam'
+    file: wizards/robotiq-gripper.html

@@ -1,0 +1,207 @@
+<style type="text/css">
+    robotiq-gripper .upper{
+        padding-bottom: 16px;
+    }
+    robotiq-gripper .upper:first-of-type{
+        border-bottom: 1px dotted #bebec8;
+    }
+    robotiq-gripper .upper h3{
+        text-align: center;
+    }
+    robotiq-gripper .lower{
+        display: flex;
+        background: #333333;
+        border: 1px solid #bebec8;
+        border-radius: 4px;
+    }
+    robotiq-gripper .buttons{
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 8px;
+    }
+    robotiq-gripper .buttons button{
+        background: #4d4d4d;
+        padding: 8px;
+        color: white;
+        border: 1px solid #999999;
+        border-radius: 4px;
+        outline: none;
+    }
+    robotiq-gripper .buttons button:hover{
+        background: #333333;
+    }
+    robotiq-gripper .buttons button:active{
+        background: #222222;
+    }
+    robotiq-gripper .lower>div{
+        flex: 1;
+        padding: 16px;
+    }
+    robotiq-gripper .lower>div h4{
+        text-align: center;
+        margin-top: 0;
+        margin-bottom: 8px;
+    }
+    robotiq-gripper .lower>div:first-of-type{
+        border-right: 1px solid #bebec8;
+    }
+</style>
+<template id="robotiq-gripper-template">
+    <div>
+        <div class="upper">
+            <h3>Current Position</h3>
+            <slider-input id="current-position" min="0" max="85" unit="mm" disabled></slider-input>
+        </div>
+        <div class="upper">
+            <h3>Move To Position</h3>
+           <slider-input id="move-to-position" min="0" max="85" unit="mm"></slider-input>
+        </div>
+        <div class="buttons">
+            <button id="gripper-init">Init Gripper</button>
+            <button id="gripper-move">Move to Position</button>
+        </div>
+        <div class="lower">
+            <div>
+                <h4>Speed</h4>
+                <slider-input id="speed" min="0" max="100" unit="%"></slider-input>
+            </div>
+            <div>
+                <h4>Force</h4>
+               <slider-input id="force" min="0" max="100" unit="%"></slider-input>
+           </div>
+        </div>
+    </div>
+</template>
+
+<script>
+    class RobotiqGripper extends HTMLElement {
+
+        constructor() {
+            super();
+            let tmpl = document.querySelector("#robotiq-gripper-template");
+            this.appendChild(tmpl.content.cloneNode(true));
+            if(this.getAttribute('parameter') === null){
+                this.parameter = {
+                    parameters: [
+                    {
+                        value: 120
+                    },
+                    {
+                        value: 120
+                    },
+                    {
+                        value: 120
+                    }]
+                }
+            }
+            let that = this;
+            this.querySelector('slider-input#move-to-position').addEventListener('response', function(e){
+                that.parameter.parameters[0].value = String(Math.round((85 - e.detail) / 85 *255));
+            });
+            this.querySelector('slider-input#speed').addEventListener('response', function(e){
+                that.parameter.parameters[1].value = String(Math.round(e.detail * 2.55));
+            });;
+            this.querySelector('slider-input#force').addEventListener('response', function(e){
+                that.parameter.parameters[2].value = String(Math.round(e.detail * 2.55));
+            });;
+            this.querySelector('button#gripper-move').onclick = e => this.gripperMove();
+            this.querySelector('button#gripper-init').onclick = e => this.gripperInit();
+        }
+
+        connectedCallback(){
+            event = new Event("add-ros", {bubbles: true});
+            this.dispatchEvent(event);
+        }
+
+        set ros(value){
+            this.moveTopic = new ROSLIB.Topic({
+                ros : value,
+                name : '/CModelRobotOutput',
+                message_type : 'robotiq_c_model_control/CModel_robot_output',
+                throttle_rate: 200
+            });
+            let positionTopic = new ROSLIB.Topic({
+                ros: value,
+                name: '/CModelRobotInput',
+                messageType: 'robotiq_c_model_control/CModel_robot_input'
+            });
+            let that = this;
+            positionTopic.subscribe(function(message){
+                that.querySelector("slider-input#current-position").value = toSlider(message.gPO);
+            });
+            function toSlider(value) {
+                return Math.round((255 - value) * 85 / 255);
+            }
+        }
+
+        set parameter(value){
+            this._parameter = value;
+            let moveToSlider = this.querySelector('slider-input#move-to-position');
+            let speedSlider = this.querySelector('slider-input#speed');
+            let forceSlider = this.querySelector('slider-input#force');
+
+            setMove();
+            setSpeed();
+            setForce();
+            function setMove(){
+                if(moveToSlider.connected){
+                    moveToSlider.value = Math.round((255 - value.parameters[0].value) / 255 *85);
+                } else {
+                    setTimeout(setMove, 100);
+                }
+            }
+            function setSpeed(){
+                if(speedSlider.connected){
+                    speedSlider.value = Math.round(value.parameters[1].value / 2.55);
+                } else {
+                    setTimeout(setSpeed, 100);
+                }
+            }
+            function setForce(){
+                if(forceSlider.connected){
+                    forceSlider.value = Math.round(value.parameters[2].value / 2.55);
+                } else {
+                    setTimeout(setForce, 100);
+                }
+            }
+        }
+        get parameter(){
+            return this._parameter;
+        }
+
+        gripperMove(e){
+            this.moveTopic.publish({
+                    rACT: 1,
+                    rGTO: 1,
+                    rATR: 0,
+                    rPR: parseInt(this.parameter.parameters[0].value),
+                    rSP: parseInt(this.parameter.parameters[1].value),
+                    rFR: parseInt(this.parameter.parameters[2].value)
+                });
+        }
+
+        gripperInit(e){
+            this.moveTopic.publish({
+                    rACT: 0,
+                    rGTO: 0,
+                    rATR: 0,
+                    rPR: 0,
+                    rSP: 0,
+                    rFR: 0
+            });
+            let that = this;
+            setTimeout(function() {
+                that.moveTopic.publish({
+                    rACT: 1,
+                    rGTO: 1,
+                    rATR: 0,
+                    rPR: 0,
+                    rSP: 255,
+                    rFR: 150
+                });
+            }, 1000);
+        }
+    }
+    window.customElements.define('robotiq-gripper', RobotiqGripper);
+</script>
+
