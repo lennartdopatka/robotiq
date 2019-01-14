@@ -70,10 +70,6 @@
   "createdAt": "2018-08-04T19:16:29.980Z",
   "updatedAt": "2018-08-05T22:06:57.867Z",
   "models": [],
-  "componentFb": {
-    "package": "robotiq_c_model_control",
-    "type": "driver/gripper/robotiq/2finger",
-    "id": "control", 
-    "version": 1.0
-  }
+  "version": "0.1.0",
+  "identifier": "376e92ab-5cc2-4390-a272-eeaf4d8631e3"
 }

@@ -11,10 +11,6 @@
   "description": "Open the attached Gripper",
   "image": "icons-tools-gripper-open",
   "models": [],
-  "componentFb": {
-    "version": 1.0,
-    "package": "robotiq_c_model_control",
-    "type": "driver/gripper/robotiq/2finger",
-    "id": "open" 
-  }
+  "version": "0.1.0",
+  "identifier": "a816cbb0-e787-44f1-a45f-fae3d962cd54"
 }

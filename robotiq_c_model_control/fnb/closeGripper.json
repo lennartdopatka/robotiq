@@ -11,10 +11,6 @@
   "description": "Close the attached Gripper",
   "image": "icons-tools-gripper-close",
   "models": [],
-  "componentFb": {
-    "version": 1.0,
-    "package": "robotiq_c_model_control",
-    "type": "driver/gripper/robotiq/2finger",
-    "id": "close" 
-  }
+  "identifier": "b86b1d27-5cc1-403b-961e-3e61458b2fe2",
+  "version": "0.1.1"
 }
